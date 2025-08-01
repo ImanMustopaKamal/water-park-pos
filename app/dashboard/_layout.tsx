@@ -20,7 +20,7 @@ export default function Layout() {
           <Sidebar />
           <View style={{ flex: 1 }}>
             <Topbar />
-            <View style={{ flex: 1, padding: 16 }}>
+            <View style={{ flex: 1, paddingHorizontal: 20, paddingVertical: 16 }}>
               <Slot />
             </View>
           </View>

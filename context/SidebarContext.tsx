@@ -12,8 +12,8 @@ export const SidebarProvider = ({ children }: any) => {
 
   useEffect(() => {
     // Sidebar akan tertutup otomatis saat di halaman /transaksi
-    const shouldCollapse = pathname.startsWith("/transaksi");
-    setCollapsed(shouldCollapse);
+    const shouldCollapse = pathname.startsWith("/dashboard/transaction");
+    setCollapsed(shouldCollapse ? true : collapsed);
   }, [pathname]);
 
   const toggle = () => setCollapsed((prev) => !prev);

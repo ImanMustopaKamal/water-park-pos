@@ -5,24 +5,26 @@
     "version": "1.0.0",
     "orientation": "landscape",
     "scheme": "point-of-sales",
-    "icon": "./assets/logo.jpg",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/logo.jpg",
-      "resizeMode": "contain",
+      "image": "./assets/logo.png",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "screenOrientation": ["landscape-left", "landscape-right"]
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.jpg",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.imankamal.pointofsales"
+      "package": "com.imankamal.pointofsales",
+      "screenOrientation": "sensor-landscape"
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -8,22 +8,28 @@ const menuItems = [
   {
     label: "Dashboard",
     icon: "view-dashboard",
-    path: "/",
+    path: "/dashboard",
     roles: ["admin", "kasir", "spv"],
   },
-  { label: "Transaksi", icon: "cart", path: "/transaksi", roles: ["kasir"] },
   {
-    label: "Manajemen User",
-    icon: "account-multiple",
-    path: "/users",
+    label: "Membership",
+    icon: "wallet-membership",
+    path: "/dashboard/membership",
     roles: ["admin"],
   },
   {
-    label: "Laporan",
-    icon: "file-chart",
-    path: "/laporan",
-    roles: ["admin", "spv"],
+    label: "Manajemen User",
+    icon: "account-multiple",
+    path: "/dashboard/user",
+    roles: ["admin"],
   },
+  { label: "Transaksi", icon: "cash-register", path: "/dashboard/transaction", roles: ["kasir", "admin"] },
+  // {
+  //   label: "Laporan",
+  //   icon: "file-chart",
+  //   path: "/dashboard/laporan",
+  //   roles: ["admin", "spv"],
+  // },
 ];
 
 export default function Sidebar() {
@@ -33,25 +39,26 @@ export default function Sidebar() {
   const { collapsed } = useSidebar();
 
   const visibleMenus = menuItems.filter((item) =>
-    item.roles.includes(user?.role_name || 'admin')
+    item.roles.includes(user?.role_name || "admin")
   );
 
   return (
     <View
       style={{
-        width: collapsed ? 64 : 240,
-        backgroundColor: "#1F1F2E",
+        width: collapsed ? 64 : 220,
+        backgroundColor: "#ffffffff",
         height: "100%",
-        paddingTop: 40,
+        paddingTop: 10,
         paddingHorizontal: 8,
+        elevation: 2
       }}
     >
-      <View style={{ alignItems: "center", marginBottom: 24 }}>
+      <View style={{ alignItems: "center", marginVertical: 10 }}>
         <Image
-          source={require("../assets/logo.jpg")} // ganti path ini sesuai lokasi logomu
+          source={collapsed ? require("../assets/logo.png") : require("../assets/logo-text.png")} // ganti path ini sesuai lokasi logomu
           style={{
             width: collapsed ? 40 : 120,
-            height: 40,
+            height: collapsed ? 40 : 60,
             resizeMode: "contain",
           }}
         />
@@ -63,19 +70,29 @@ export default function Sidebar() {
             flexDirection: "row",
             alignItems: "center",
             paddingVertical: 12,
-            paddingHorizontal: 8,
-            backgroundColor: pathname === item.path ? "#333" : "transparent",
+            paddingHorizontal: 12,
+            // paddingLeft: 12,
+            backgroundColor:
+              pathname === item.path ? "#324eebff" : "transparent",
             borderRadius: 8,
           }}
           onTouchEnd={() => router.push(item.path)}
         >
           <MaterialCommunityIcons
             name={item.icon as any}
-            size={24}
-            color="white"
+            size={26}
+            style={{ color: pathname === item.path ? "#ffffff" : "#324eebff" }}
           />
           {!collapsed && (
-            <Text style={{ color: "white", marginLeft: 12 }}>{item.label}</Text>
+            <Text
+              style={{
+                color: pathname === item.path ? "#ffffff" : "#3254ebff",
+                marginLeft: 12,
+                flex: 1,
+              }}
+            >
+              {item.label}
+            </Text>
           )}
         </View>
       ))}
