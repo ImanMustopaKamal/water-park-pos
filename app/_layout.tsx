@@ -3,6 +3,7 @@ import { Slot } from "expo-router";
 import { AuthProvider } from "../context/AuthContext";
 import { PaperProvider } from "react-native-paper";
 import { initDatabase } from "../database/initDB";
+import { ThemeProvider } from "../context/ThemeContext";
 
 // Initialize database
 initDatabase();
@@ -10,11 +11,11 @@ initDatabase();
 export default function RootLayout() {
   return (
     <SafeAreaProvider>
-      <PaperProvider>
+      <ThemeProvider>
         <AuthProvider>
           <Slot />
         </AuthProvider>
-      </PaperProvider>
+      </ThemeProvider>
     </SafeAreaProvider>
   );
 }
