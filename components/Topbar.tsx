@@ -20,26 +20,28 @@ export default function Topbar() {
         paddingHorizontal: 16,
         paddingTop: 20,
         paddingBottom: 10,
-        elevation: 1
+        borderBottomWidth: 1,
+        borderBottomColor: colors.border,
       }}
     >
       {/* Left: Toggle + Title */}
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <TouchableOpacity
           onPress={toggle}
-          style={{ padding: 8 }} // tambah padding agar area sentuh lebih luas
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} // opsional: perluas area klik
+          style={{ padding: 8 }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Icon name="menu" size={28} style={{ color: colors.text }} />
         </TouchableOpacity>
-        {/* <Text style={{ fontSize: 18, fontWeight: "bold", marginLeft: 12 }}>
-          Dashboard
-        </Text> */}
       </View>
 
       {/* Right: Search, Bell, Avatar */}
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <TouchableOpacity onPress={toggleTheme} style={{ marginRight: 16 }}>
+        <TouchableOpacity
+          onPress={toggleTheme}
+          style={{ padding: 8 }}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
           <Icon
             name={isDark ? "white-balance-sunny" : "moon-waning-crescent"}
             size={24}
@@ -61,10 +63,10 @@ export default function Topbar() {
           />
         </View> */}
 
-        {/* <Image
+        <Image
           source={{ uri: "https://i.pravatar.cc/100" }}
           style={{ width: 36, height: 36, borderRadius: 18 }}
-        /> */}
+        />
         {/* <Text style={{ fontSize: 16, fontWeight: "500", marginLeft: 10 }}>hello</Text> */}
       </View>
     </View>

@@ -8,4 +8,5 @@ export interface PaginationResult<T> {
 export interface PaginationQuery {
   page: number;
   limit: number;
+  search?: string;
 }

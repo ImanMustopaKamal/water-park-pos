@@ -10,24 +10,28 @@ const menuItems = [
     label: "Dashboard",
     icon: "view-dashboard",
     path: "/dashboard",
+    name: "dashboard",
     roles: ["admin", "owner", "spv", "cashier"],
   },
   {
     label: "Membership",
     icon: "wallet-membership",
     path: "/dashboard/membership",
+    name: "membership",
     roles: ["admin", "owner", "spv", "cashier"],
   },
   {
     label: "Manajemen User",
     icon: "account-multiple",
     path: "/dashboard/user",
+    name: "user",
     roles: ["admin", "owner", "spv"],
   },
   {
     label: "Transaksi",
     icon: "cash-register",
     path: "/dashboard/transaction",
+    name: "transaction",
     roles: ["admin", "owner", "spv", "cashier"],
   },
   // {
@@ -42,6 +46,9 @@ export default function Sidebar() {
   const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+
+  const isMatchPathName = pathname.split("/").splice(2);
+  console.log("🚀 ~ Sidebar ~ isMatchPathName:", isMatchPathName);
   const { collapsed } = useSidebar();
   const { colors } = useCustomTheme();
 
@@ -57,7 +64,8 @@ export default function Sidebar() {
         height: "100%",
         paddingTop: 10,
         paddingHorizontal: 8,
-        elevation: 2,
+        borderRightWidth: 1,
+        borderRightColor: colors.border,
       }}
     >
       <View style={{ alignItems: "center", marginVertical: 10 }}>
@@ -82,8 +90,9 @@ export default function Sidebar() {
             alignItems: "center",
             paddingVertical: 12,
             paddingHorizontal: 12,
-            backgroundColor:
-              pathname === item.path ? colors.text : "transparent",
+            backgroundColor: pathname.split("/").includes(item.name)
+              ? colors.text
+              : "transparent",
             borderRadius: 8,
           }}
           onTouchEnd={() => router.push(item.path)}
@@ -91,12 +100,18 @@ export default function Sidebar() {
           <MaterialCommunityIcons
             name={item.icon as any}
             size={26}
-            style={{ color: pathname === item.path ? colors.background : colors.text }}
+            style={{
+              color: pathname.split("/").includes(item.name)
+                ? colors.background
+                : colors.text,
+            }}
           />
           {!collapsed && (
             <Text
               style={{
-                color: pathname === item.path ? colors.background : colors.text,
+                color: pathname.split("/").includes(item.name)
+                  ? colors.background
+                  : colors.text,
                 marginLeft: 12,
                 flex: 1,
               }}

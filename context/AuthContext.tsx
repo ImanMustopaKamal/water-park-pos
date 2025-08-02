@@ -5,7 +5,6 @@ import { getRoleById } from '../database/services/roleService';
 
 type AuthContextType = {
   user: any;
-  // role: string | null;
   login: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   isLoading: boolean;

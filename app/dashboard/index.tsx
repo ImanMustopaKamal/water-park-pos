@@ -1,10 +1,16 @@
 import { View } from "react-native";
 import { Card, Text, ProgressBar } from "react-native-paper";
+import { useCustomTheme } from "../../hooks/useCustomTheme";
 
 export default function Dashboard() {
+  const { colors } = useCustomTheme();
+
   return (
     <View style={{ flex: 1 }}>
-      <Text variant="headlineMedium" style={{ marginBottom: 16 }}>
+      <Text
+        variant="headlineMedium"
+        style={{ marginBottom: 16, color: colors.text }}
+      >
         Dashboard
       </Text>
 
