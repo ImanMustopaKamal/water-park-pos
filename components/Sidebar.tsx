@@ -10,28 +10,24 @@ const menuItems = [
     label: "Dashboard",
     icon: "view-dashboard",
     path: "/dashboard",
-    name: "dashboard",
     roles: ["admin", "owner", "spv", "cashier"],
   },
   {
     label: "Membership",
     icon: "wallet-membership",
-    path: "/dashboard/membership",
-    name: "membership",
+    path: "/membership",
     roles: ["admin", "owner", "spv", "cashier"],
   },
   {
     label: "Manajemen User",
     icon: "account-multiple",
-    path: "/dashboard/user",
-    name: "user",
+    path: "/user",
     roles: ["admin", "owner", "spv"],
   },
   {
     label: "Transaksi",
     icon: "cash-register",
-    path: "/dashboard/transaction",
-    name: "transaction",
+    path: "/transaction",
     roles: ["admin", "owner", "spv", "cashier"],
   },
   // {
@@ -46,9 +42,6 @@ export default function Sidebar() {
   const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
-
-  const isMatchPathName = pathname.split("/").splice(2);
-  console.log("🚀 ~ Sidebar ~ isMatchPathName:", isMatchPathName);
   const { collapsed } = useSidebar();
   const { colors } = useCustomTheme();
 
@@ -90,7 +83,7 @@ export default function Sidebar() {
             alignItems: "center",
             paddingVertical: 12,
             paddingHorizontal: 12,
-            backgroundColor: pathname.split("/").includes(item.name)
+            backgroundColor: pathname.split("/").includes(item.path.replaceAll('/', ''))
               ? colors.text
               : "transparent",
             borderRadius: 8,
@@ -101,7 +94,7 @@ export default function Sidebar() {
             name={item.icon as any}
             size={26}
             style={{
-              color: pathname.split("/").includes(item.name)
+              color: pathname.split("/").includes(item.path.replaceAll('/', ''))
                 ? colors.background
                 : colors.text,
             }}
@@ -109,7 +102,7 @@ export default function Sidebar() {
           {!collapsed && (
             <Text
               style={{
-                color: pathname.split("/").includes(item.name)
+                color: pathname.split("/").includes(item.path.replaceAll('/', ''))
                   ? colors.background
                   : colors.text,
                 marginLeft: 12,

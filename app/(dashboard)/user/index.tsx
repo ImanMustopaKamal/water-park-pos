@@ -12,6 +12,7 @@ import CustomDataTable from "../../../components/CustomDataTable";
 import { getAllUsers } from "../../../database/services/userService";
 import { useRole } from "../../../hooks/useRole";
 import { router } from "expo-router";
+import Container from "../../../components/Container";
 
 export default function User() {
   const { colors } = useCustomTheme();
@@ -56,65 +57,41 @@ export default function User() {
   }, [page]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.background, padding: 16 }}>
-      <Text
-        variant="headlineMedium"
-        style={{ marginBottom: 16, color: colors.text }}
-      >
-        Manajemen Users
-      </Text>
-      <Button
-        icon="plus"
-        mode="contained"
-        buttonColor={colors.text}
-        textColor={colors.background}
-        labelStyle={{ fontWeight: "bold" }}
-        onPress={() => router.push("/dashboard/user/create")}
-        style={{ alignSelf: "flex-start", marginVertical: 20 }}
-      >
-        Tambah User
-      </Button>
-      <View
+    <Container
+      title="List User"
+      addButton={{ path: "user", name: "Tambah User" }}
+    >
+      <Searchbar
+        placeholder="Cari nama atau username"
+        onChangeText={(query) => setSearchQuery(query)}
+        value={searchQuery}
         style={{
-          ...styles.wrapper,
-          shadowColor: colors.text,
-          backgroundColor: colors.background,
+          marginBottom: 16,
+          backgroundColor: colors.border,
+          width: "30%",
+          height: 50,
+          fontSize: 14,
+          borderRadius: 25,
+          alignSelf: "flex-end",
         }}
-      >
-        <View style={{ ...styles.content, backgroundColor: colors.background }}>
-          <Searchbar
-            placeholder="Cari nama atau username"
-            onChangeText={(query) => setSearchQuery(query)}
-            value={searchQuery}
-            style={{
-              marginBottom: 16,
-              backgroundColor: colors.border,
-              width: "30%",
-              height: 50,
-              fontSize: 14,
-              borderRadius: 25,
-              alignSelf: "flex-end",
-            }}
-            inputStyle={{
-              fontSize: 14, // ukuran teks di dalam search bar
-              marginTop: -3, // agar teks lebih sejajar
-            }}
-          />
-          <CustomDataTable
-            columns={columns}
-            data={data}
-            page={page}
-            totalItems={total}
-            onPageChange={setPage}
-            rowsPerPage={limit}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            showEdit={canEdit}
-            showDelete={canDelete}
-          />
-        </View>
-      </View>
-    </View>
+        inputStyle={{
+          fontSize: 14, // ukuran teks di dalam search bar
+          marginTop: -3, // agar teks lebih sejajar
+        }}
+      />
+      <CustomDataTable
+        columns={columns}
+        data={data}
+        page={page}
+        totalItems={total}
+        onPageChange={setPage}
+        rowsPerPage={limit}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        showEdit={canEdit}
+        showDelete={canDelete}
+      />
+    </Container>
   );
 }
 

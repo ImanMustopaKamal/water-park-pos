@@ -39,7 +39,7 @@ export default function Topbar() {
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <TouchableOpacity
           onPress={toggleTheme}
-          style={{ padding: 8 }}
+          style={{ padding: 8, marginRight: 30 }}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         >
           <Icon
@@ -65,7 +65,7 @@ export default function Topbar() {
 
         <Image
           source={{ uri: "https://i.pravatar.cc/100" }}
-          style={{ width: 36, height: 36, borderRadius: 18 }}
+          style={{ width: 36, height: 36, borderRadius: 18, marginRight: 20 }}
         />
         {/* <Text style={{ fontSize: 16, fontWeight: "500", marginLeft: 10 }}>hello</Text> */}
       </View>

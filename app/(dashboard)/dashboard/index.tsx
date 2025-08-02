@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { Card, Text, ProgressBar } from "react-native-paper";
-import { useCustomTheme } from "../../hooks/useCustomTheme";
+import { useCustomTheme } from "../../../hooks/useCustomTheme";
 
 export default function Dashboard() {
   const { colors } = useCustomTheme();
