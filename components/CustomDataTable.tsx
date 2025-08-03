@@ -75,7 +75,7 @@ const CustomDataTable: React.FC<CustomDataTableProps> = ({
           <DataTable.Cell style={{ justifyContent: "center" }}>
             {showEdit && (
               <TouchableOpacity
-                onPress={() => onDelete?.(row)}
+                onPress={() => onEdit?.(row)}
                 style={{ padding: 8 }}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >

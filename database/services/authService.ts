@@ -25,7 +25,7 @@ export const loginUser = async (username: string, password: string): Promise<Use
       SELECT users.*, roles.name as role_name
       FROM users
       JOIN roles ON users.role_id = roles.id
-      WHERE users.username = ?
+      WHERE users.username = ? AND users.status = 1
       `,
       [username]
     );

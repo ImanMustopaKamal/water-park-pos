@@ -26,6 +26,7 @@ export const initDatabase = async () => {
       name TEXT NOT NULL,
       password TEXT NOT NULL,
       role_id INTEGER,
+      status INTEGER NOT NULL DEFAULT 1,
       FOREIGN KEY (role_id) REFERENCES roles (id)
     );`
   );

@@ -5,8 +5,8 @@ import { useCustomTheme } from "../../../hooks/useCustomTheme";
 import Container from "../../../components/Container";
 import { getAllRole } from "../../../database/services/roleService";
 import DropdownComponent from "../../../components/Dropdown";
-import { router } from "expo-router";
-import { createUser } from "../../../database/services/userService";
+import { router, useLocalSearchParams } from "expo-router";
+import { createUser, getUser, updateUser } from "../../../database/services/userService";
 import { useSnackbar } from "../../../components/SnackbarProvider";
 
 interface IRoles {
@@ -14,13 +14,16 @@ interface IRoles {
   value: number;
 }
 
-export default function UserCreate() {
+export default function UserEdit() {
+  const { id } = useLocalSearchParams();
+  const selectedId = Array.isArray(id) ? id[0] : id;
   const { colors } = useCustomTheme();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [nama, setNama] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [roles, setRoles] = useState<IRoles[]>([{ label: "", value: 0 }]);
@@ -30,33 +33,38 @@ export default function UserCreate() {
 
   const handleSubmit = async () => {
     setLoading(true);
-    if (password.length < 4) {
-      alert("Password minimal 4 karakter");
-      setLoading(false);
-      return;
-    }
-    if (password !== confirmPassword) {
-      setLoading(false);
-      alert("Password dan konfirmasi tidak sama!");
-      return;
+    if (password !== "" && confirmPassword !== "") {
+      if (password.length < 4) {
+        alert("Password minimal 4 karakter");
+        setLoading(false);
+        return;
+      }
+      if (password !== confirmPassword) {
+        setLoading(false);
+        alert("Password dan konfirmasi tidak sama!");
+        return;
+      }
     }
 
     const newUser = {
+      id: selectedId,
       username,
       name: nama,
-      password,
+      password: password,
+      oldPassword,
       role_id: role,
     };
+    console.log("🚀 ~ handleSubmit ~ newUser:", newUser)
 
     try {
-      const result = await createUser(newUser);
+      const result = await updateUser(newUser);
       if (result) {
-        setLoading(false)
+        setLoading(false);
         showSnackbar("Data berhasil disimpan!", "success");
         router.replace("/user");
       }
     } catch (error: any) {
-      setLoading(false)
+      setLoading(false);
       const errorMessage =
         error instanceof Error
           ? error.message
@@ -68,7 +76,7 @@ export default function UserCreate() {
     }
   };
 
-  const loadData = async () => {
+  const getRole = async () => {
     const data = await getAllRole();
     if (data.length !== 0) {
       const mapped: IRoles[] = data.map((item) => ({
@@ -79,12 +87,37 @@ export default function UserCreate() {
     }
   };
 
+  const loadData = async (id: string) => {
+    try {
+      const result = await getUser(id);
+      if (result) {
+        setUsername(result.username);
+        setNama(result.name);
+        setRole(result.role_id);
+        setOldPassword(result.password);
+      }
+      console.log("🚀 ~ loadData ~ result:", result);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : typeof error === "string"
+          ? error
+          : "Terjadi kesalahan saat menyimpan data";
+
+      showSnackbar(errorMessage, "error");
+    }
+  };
+
   useEffect(() => {
-    loadData();
-  }, []);
+    if (selectedId) {
+      getRole();
+      loadData(selectedId); // now selectedId is definitely string
+    }
+  }, [selectedId]);
 
   return (
-    <Container title="Tambah User">
+    <Container title="Edit User">
       <TextInput
         mode="outlined"
         label="Username"
@@ -92,13 +125,7 @@ export default function UserCreate() {
         onChangeText={setUsername}
         style={styles.input}
         autoCapitalize="none"
-        theme={{
-          colors: {
-            primary: colors.text,
-            text: colors.text,
-            placeholder: colors.text,
-          },
-        }}
+        disabled
       />
       <TextInput
         mode="outlined"
@@ -116,7 +143,7 @@ export default function UserCreate() {
       />
       <TextInput
         mode="outlined"
-        label="Password"
+        label="Password Baru"
         value={password}
         onChangeText={setPassword}
         style={styles.input}
@@ -138,7 +165,7 @@ export default function UserCreate() {
 
       <TextInput
         mode="outlined"
-        label="Konfirmasi Password"
+        label="Konfirmasi Password Baru"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         style={styles.input}
@@ -195,7 +222,7 @@ export default function UserCreate() {
               : undefined
           }
         >
-          {loading ? "Loading..." : "Simpan User"}
+          {loading ? "Loading..." : "Ubah User"}
         </Button>
       </View>
     </Container>

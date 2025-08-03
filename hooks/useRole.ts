@@ -28,7 +28,7 @@ const rawRolePermissions: Record<string, RawPermissionMap> = {
     transaction: { canEdit: true, canDelete: true },
   },
   ADMIN: {
-    user: { canEdit: false, canDelete: true },
+    user: { canEdit: true, canDelete: true },
     membership: { canEdit: true, canDelete: false },
     transaction: { canEdit: false, canDelete: true },
   },

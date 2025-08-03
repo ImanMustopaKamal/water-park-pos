@@ -8,6 +8,7 @@ import {
 type CustomColors = MD3Theme["colors"] & {
   text: string;
   border: string;
+  borderInput: string;
 };
 
 export type CustomTheme = Omit<MD3Theme, "colors"> & {
@@ -27,6 +28,7 @@ export const lightTheme = {
     surface: "#ffffff",
     text: "#020618",
     border: "#e2e8f0",
+    borderInput: "#808080c7"
   },
   fonts: configureFonts({ config }),
 } as CustomTheme;
@@ -39,7 +41,8 @@ export const darkTheme: CustomTheme = {
     background: "#020618",
     surface: "#1f1f1f",
     text: "#ffffff",
-    border: "#ffffff1a",
+    border: "#ffffff77",
+    borderInput: "#808080c7"
   },
   fonts: configureFonts({ config }),
 } as CustomTheme;

@@ -9,10 +9,14 @@ import {
 import { useCustomTheme } from "../../../hooks/useCustomTheme";
 import { useEffect, useState } from "react";
 import CustomDataTable from "../../../components/CustomDataTable";
-import { getAllUsers } from "../../../database/services/userService";
+import {
+  deleteUser,
+  getAllUsers,
+} from "../../../database/services/userService";
 import { useRole } from "../../../hooks/useRole";
-import { router } from "expo-router";
 import Container from "../../../components/Container";
+import { useSnackbar } from "../../../components/SnackbarProvider";
+import { router } from "expo-router";
 
 export default function User() {
   const { colors } = useCustomTheme();
@@ -20,9 +24,10 @@ export default function User() {
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [search, setSearch] = useState("");
   const limit = 10;
   const { canEdit, canDelete } = useRole("user");
+  const { showSnackbar } = useSnackbar();
 
   const columns = [
     { key: "name", title: "Nama" },
@@ -31,18 +36,46 @@ export default function User() {
     { key: "", title: "Aksi" },
   ];
 
-  const handleEdit = (item: any) => {
-    Alert.alert("Edit", `Edit data: ${item.id}`);
-  };
-
   const handleDelete = (item: any) => {
-    Alert.alert("Hapus", `Hapus data: ${item.id}`);
+    Alert.alert(
+      "Konfirmasi",
+      "Yakin ingin menghapus data ini?",
+      [
+        {
+          text: "Tidak",
+          onPress: () => console.log("Batal"),
+          style: "cancel",
+        },
+        {
+          text: "Ya",
+          onPress: async () => {
+            try {
+              const response = await deleteUser(item.id);
+              if (response) {
+                showSnackbar("Data berhasil dihapus", "success");
+                loadData();
+              }
+            } catch (error: any) {
+              const errorMessage =
+                error instanceof Error
+                  ? error.message
+                  : typeof error === "string"
+                  ? error
+                  : "Terjadi kesalahan saat menyimpan data";
+
+              showSnackbar(errorMessage, "error");
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   const loadData = async () => {
     setLoading(true);
     try {
-      const result = await getAllUsers({ page, limit });
+      const result = await getAllUsers({ page, limit, search });
       setData(result.data);
       setTotal(result.total);
     } catch (err) {
@@ -54,7 +87,7 @@ export default function User() {
 
   useEffect(() => {
     loadData();
-  }, [page]);
+  }, [page, search]);
 
   return (
     <Container
@@ -63,8 +96,8 @@ export default function User() {
     >
       <Searchbar
         placeholder="Cari nama atau username"
-        onChangeText={(query) => setSearchQuery(query)}
-        value={searchQuery}
+        onChangeText={(query) => setSearch(query)}
+        value={search}
         style={{
           marginBottom: 16,
           backgroundColor: colors.border,
@@ -86,7 +119,7 @@ export default function User() {
         totalItems={total}
         onPageChange={setPage}
         rowsPerPage={limit}
-        onEdit={handleEdit}
+        onEdit={(item: any) => router.replace(`/user/${item.id}`)}
         onDelete={handleDelete}
         showEdit={canEdit}
         showDelete={canDelete}
@@ -94,18 +127,3 @@ export default function User() {
     </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  wrapper: {
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.7,
-    shadowRadius: 1,
-    elevation: 2,
-    borderRadius: 15,
-  },
-  content: {
-    padding: 20,
-    alignItems: "center",
-    borderRadius: 15,
-  },
-});
