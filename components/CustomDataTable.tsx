@@ -8,6 +8,7 @@ interface Column {
   key: string;
   title: string;
   numeric?: boolean;
+  render?: (value: any, row: RowData) => React.ReactNode;
 }
 
 interface RowData {
@@ -69,7 +70,12 @@ const CustomDataTable: React.FC<CustomDataTableProps> = ({
                 numeric={col.numeric}
                 style={{ justifyContent: "center" }}
               >
-                <Text style={{ textAlign: "center" }}>{row[col.key]}</Text>
+                {col.render ? (
+                  col.render(row[col.key], row)
+                ) : (
+                  <Text style={{ textAlign: "center" }}>{row[col.key]}</Text>
+                )}
+                {/* <Text style={{ textAlign: "center" }}>{row[col.key]}</Text> */}
               </DataTable.Cell>
             ))}
           <DataTable.Cell style={{ justifyContent: "center" }}>

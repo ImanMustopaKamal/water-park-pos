@@ -61,7 +61,7 @@ export default function User() {
                   ? error.message
                   : typeof error === "string"
                   ? error
-                  : "Terjadi kesalahan saat menyimpan data";
+                  : "Terjadi kesalahan pada server";
 
               showSnackbar(errorMessage, "error");
             }
@@ -95,7 +95,7 @@ export default function User() {
       addButton={{ path: "user", name: "Tambah User" }}
     >
       <Searchbar
-        placeholder="Cari nama atau username"
+        placeholder="Cari user"
         onChangeText={(query) => setSearch(query)}
         value={search}
         style={{
@@ -108,8 +108,8 @@ export default function User() {
           alignSelf: "flex-end",
         }}
         inputStyle={{
-          fontSize: 14, // ukuran teks di dalam search bar
-          marginTop: -3, // agar teks lebih sejajar
+          fontSize: 14,
+          marginTop: -3,
         }}
       />
       <CustomDataTable

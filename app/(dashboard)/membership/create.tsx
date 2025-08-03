@@ -3,57 +3,44 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
 import { useCustomTheme } from "../../../hooks/useCustomTheme";
 import Container from "../../../components/Container";
-import { getAllRole } from "../../../database/services/roleService";
 import DropdownComponent from "../../../components/Dropdown";
 import { router } from "expo-router";
-import { createUser } from "../../../database/services/userService";
 import { useSnackbar } from "../../../components/SnackbarProvider";
+import { getAllMemberCatogories } from "../../../database/services/MemberCategoryServices";
+import { createMembership } from "../../../database/services/membershipServices";
 
 interface IDropdown {
   label: string;
   value: number;
 }
 
-export default function UserCreate() {
+export default function MembershipCreate() {
   const { colors } = useCustomTheme();
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState("");
-  const [nama, setNama] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [roles, setRoles] = useState<IDropdown[]>([{ label: "", value: 0 }]);
-  const [role, setRole] = useState<number>(0);
+  
+  const [mcCategory, setMcCategory] = useState<IDropdown[]>([
+    { label: "", value: 0 },
+  ]);
+  const [category, setCategory] = useState<number>(0);
 
   const { showSnackbar } = useSnackbar();
 
   const handleSubmit = async () => {
     setLoading(true);
-    if (password.length < 4) {
-      alert("Password minimal 4 karakter");
-      setLoading(false);
-      return;
-    }
-    if (password !== confirmPassword) {
-      setLoading(false);
-      alert("Password dan konfirmasi tidak sama!");
-      return;
-    }
-
-    const newUser = {
-      username,
-      name: nama,
-      password,
-      role_id: role,
+    const payload = {
+      name,
+      description,
+      category_id: category,
     };
 
     try {
-      const result = await createUser(newUser);
+      const result = await createMembership(payload);
       if (result) {
         setLoading(false);
         showSnackbar("Data berhasil disimpan!", "success");
-        router.replace("/user");
+        router.replace("/membership");
       }
     } catch (error: any) {
       setLoading(false);
@@ -69,13 +56,13 @@ export default function UserCreate() {
   };
 
   const loadData = async () => {
-    const data = await getAllRole();
+    const data = await getAllMemberCatogories();
     if (data.length !== 0) {
       const mapped: IDropdown[] = data.map((item) => ({
         label: item.name,
         value: item.id,
       }));
-      setRoles(mapped);
+      setMcCategory(mapped);
     }
   };
 
@@ -84,7 +71,7 @@ export default function UserCreate() {
   }, []);
 
   return (
-    <Container title="Tambah User">
+    <Container title="Tambah Membership">
       <View
         style={{
           marginBottom: 16,
@@ -94,34 +81,19 @@ export default function UserCreate() {
       >
         <ScrollView>
           <DropdownComponent
-            title="Roles"
-            data={roles}
-            onChange={(i: any) => setRole(i)}
-            value={role}
+            title="Kategori Member"
+            data={mcCategory}
+            onChange={(i: any) => setCategory(i)}
+            value={category}
           />
         </ScrollView>
       </View>
 
       <TextInput
         mode="outlined"
-        label="Username"
-        value={username}
-        onChangeText={setUsername}
-        style={styles.input}
-        autoCapitalize="none"
-        theme={{
-          colors: {
-            primary: colors.text,
-            text: colors.text,
-            placeholder: colors.text,
-          },
-        }}
-      />
-      <TextInput
-        mode="outlined"
         label="Nama Lengkap"
-        value={nama}
-        onChangeText={setNama}
+        value={name}
+        onChangeText={setName}
         style={styles.input}
         theme={{
           colors: {
@@ -130,35 +102,16 @@ export default function UserCreate() {
             placeholder: colors.text,
           },
         }}
-      />
-      <TextInput
-        mode="outlined"
-        label="Password"
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-        theme={{
-          colors: {
-            primary: colors.text,
-            text: colors.text,
-            placeholder: colors.text,
-          },
-        }}
-        secureTextEntry={!showPassword}
-        right={
-          <TextInput.Icon
-            icon={showPassword ? "eye-off" : "eye"}
-            onPress={() => setShowPassword(!showPassword)}
-          />
-        }
       />
 
       <TextInput
         mode="outlined"
-        label="Konfirmasi Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        style={styles.input}
+        label="Keterangan"
+        value={description}
+        onChangeText={setDescription}
+        multiline
+        numberOfLines={4}
+        style={{ ...styles.input, height: 120 }}
         theme={{
           colors: {
             primary: colors.text,
@@ -166,13 +119,6 @@ export default function UserCreate() {
             placeholder: colors.text,
           },
         }}
-        secureTextEntry={!showConfirmPassword}
-        right={
-          <TextInput.Icon
-            icon={showConfirmPassword ? "eye-off" : "eye"}
-            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-          />
-        }
       />
 
       <View
@@ -185,7 +131,7 @@ export default function UserCreate() {
       >
         <Button
           mode="outlined"
-          onPress={() => router.replace("/user")}
+          onPress={() => router.replace("/membership")}
           style={{ width: "30%", marginTop: 16 }}
         >
           Kembali
@@ -201,7 +147,7 @@ export default function UserCreate() {
               : undefined
           }
         >
-          {loading ? "Loading..." : "Simpan User"}
+          {loading ? "Loading..." : "Simpan Membership"}
         </Button>
       </View>
     </Container>

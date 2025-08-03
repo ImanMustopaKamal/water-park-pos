@@ -30,7 +30,6 @@ export const getAllRole = async (): Promise<Role[]> => {
 
     return result;
   } catch (error) {
-    console.log("🚀 ~ getAllRole ~ error:", error)
     throw error;
   }
 };

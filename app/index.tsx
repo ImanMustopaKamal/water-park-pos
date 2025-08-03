@@ -24,7 +24,7 @@ export default function LoginScreen() {
           ? error.message
           : typeof error === "string"
           ? error
-          : "Terjadi kesalahan saat menyimpan data";
+          : "Terjadi kesalahan pada server";
 
       showSnackbar(errorMessage, "error");
       // setError(err.message);

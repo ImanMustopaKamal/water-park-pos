@@ -7,13 +7,12 @@ import { getAllRole } from "../../../database/services/roleService";
 import DropdownComponent from "../../../components/Dropdown";
 import { router, useLocalSearchParams } from "expo-router";
 import {
-  createUser,
   getUser,
   updateUser,
 } from "../../../database/services/userService";
 import { useSnackbar } from "../../../components/SnackbarProvider";
 
-interface IRoles {
+interface IDropdown {
   label: string;
   value: number;
 }
@@ -30,7 +29,7 @@ export default function UserEdit() {
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [roles, setRoles] = useState<IRoles[]>([{ label: "", value: 0 }]);
+  const [roles, setRoles] = useState<IDropdown[]>([{ label: "", value: 0 }]);
   const [role, setRole] = useState<number>(0);
 
   const { showSnackbar } = useSnackbar();
@@ -74,7 +73,7 @@ export default function UserEdit() {
           ? error.message
           : typeof error === "string"
           ? error
-          : "Terjadi kesalahan saat menyimpan data";
+          : "Terjadi kesalahan pada server";
 
       showSnackbar(errorMessage, "error");
     }
@@ -83,7 +82,7 @@ export default function UserEdit() {
   const getRole = async () => {
     const data = await getAllRole();
     if (data.length !== 0) {
-      const mapped: IRoles[] = data.map((item) => ({
+      const mapped: IDropdown[] = data.map((item) => ({
         label: item.name,
         value: item.id,
       }));
@@ -107,7 +106,7 @@ export default function UserEdit() {
           ? error.message
           : typeof error === "string"
           ? error
-          : "Terjadi kesalahan saat menyimpan data";
+          : "Terjadi kesalahan pada server";
 
       showSnackbar(errorMessage, "error");
     }
@@ -116,7 +115,7 @@ export default function UserEdit() {
   useEffect(() => {
     if (selectedId) {
       getRole();
-      loadData(selectedId); // now selectedId is definitely string
+      loadData(selectedId); 
     }
   }, [selectedId]);
 
@@ -147,7 +146,7 @@ export default function UserEdit() {
         onChangeText={setUsername}
         style={styles.input}
         autoCapitalize="none"
-        disabled
+        readOnly
       />
       <TextInput
         mode="outlined"
