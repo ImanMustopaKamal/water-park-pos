@@ -1,5 +1,5 @@
 import { PaperProvider } from "react-native-paper";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { Redirect, Slot } from "expo-router";
 import Sidebar from "../../components/Sidebar";
 import Topbar from "../../components/Topbar";
@@ -24,11 +24,12 @@ export default function Layout() {
           <Sidebar />
           <View style={{ flex: 1 }}>
             <Topbar />
-            <View
+            <ScrollView
               style={{ flex: 1 }}
+              contentContainerStyle={{ flexGrow: 1 }}
             >
               <Slot />
-            </View>
+            </ScrollView>
           </View>
         </View>
       </SidebarProvider>

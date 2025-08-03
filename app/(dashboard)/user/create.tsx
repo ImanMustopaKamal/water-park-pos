@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
 import { useCustomTheme } from "../../../hooks/useCustomTheme";
 import Container from "../../../components/Container";
@@ -51,12 +51,12 @@ export default function UserCreate() {
     try {
       const result = await createUser(newUser);
       if (result) {
-        setLoading(false)
+        setLoading(false);
         showSnackbar("Data berhasil disimpan!", "success");
         router.replace("/user");
       }
     } catch (error: any) {
-      setLoading(false)
+      setLoading(false);
       const errorMessage =
         error instanceof Error
           ? error.message
@@ -85,6 +85,23 @@ export default function UserCreate() {
 
   return (
     <Container title="Tambah User">
+      <View
+        style={{
+          marginBottom: 16,
+          width: "70%",
+          justifyContent: "flex-start",
+        }}
+      >
+        <ScrollView>
+          <DropdownComponent
+            title="Roles"
+            data={roles}
+            onChange={(i: any) => setRole(i)}
+            value={role}
+          />
+        </ScrollView>
+      </View>
+
       <TextInput
         mode="outlined"
         label="Username"
@@ -157,17 +174,6 @@ export default function UserCreate() {
           />
         }
       />
-
-      <View
-        style={{ marginBottom: 16, width: "70%", justifyContent: "flex-start" }}
-      >
-        <DropdownComponent
-          title="Roles"
-          data={roles}
-          onChange={(i: any) => setRole(i)}
-          value={role}
-        />
-      </View>
 
       <View
         style={{

@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
 import { useCustomTheme } from "../../../hooks/useCustomTheme";
 import Container from "../../../components/Container";
 import { getAllRole } from "../../../database/services/roleService";
 import DropdownComponent from "../../../components/Dropdown";
 import { router, useLocalSearchParams } from "expo-router";
-import { createUser, getUser, updateUser } from "../../../database/services/userService";
+import {
+  createUser,
+  getUser,
+  updateUser,
+} from "../../../database/services/userService";
 import { useSnackbar } from "../../../components/SnackbarProvider";
 
 interface IRoles {
@@ -54,7 +58,7 @@ export default function UserEdit() {
       oldPassword,
       role_id: role,
     };
-    console.log("🚀 ~ handleSubmit ~ newUser:", newUser)
+    console.log("🚀 ~ handleSubmit ~ newUser:", newUser);
 
     try {
       const result = await updateUser(newUser);
@@ -118,6 +122,24 @@ export default function UserEdit() {
 
   return (
     <Container title="Edit User">
+      <View
+        style={{
+          marginBottom: 16,
+          width: "70%",
+          justifyContent: "flex-start",
+          zIndex: 10,
+        }}
+      >
+        <ScrollView>
+          <DropdownComponent
+            title="Roles"
+            data={roles}
+            onChange={(i: any) => setRole(i)}
+            value={role}
+          />
+        </ScrollView>
+      </View>
+
       <TextInput
         mode="outlined"
         label="Username"
@@ -184,17 +206,6 @@ export default function UserEdit() {
           />
         }
       />
-
-      <View
-        style={{ marginBottom: 16, width: "70%", justifyContent: "flex-start" }}
-      >
-        <DropdownComponent
-          title="Roles"
-          data={roles}
-          onChange={(i: any) => setRole(i)}
-          value={role}
-        />
-      </View>
 
       <View
         style={{

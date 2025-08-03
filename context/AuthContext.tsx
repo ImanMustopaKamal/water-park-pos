@@ -60,7 +60,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(user);
       // setRole(roleData.name);
     } catch (error) {
-      console.error('Login failed', error);
+      // console.error('Login failed', error);
       throw error;
     }
   };

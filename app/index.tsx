@@ -3,6 +3,7 @@ import { View, Image, StyleSheet, useWindowDimensions } from "react-native";
 import { TextInput, Button, Text, Divider } from "react-native-paper";
 import { Redirect, router } from "expo-router";
 import { useAuth } from "../context/AuthContext";
+import { useSnackbar } from "../components/SnackbarProvider";
 
 export default function LoginScreen() {
   const [username, setUsername] = React.useState("");
@@ -10,13 +11,23 @@ export default function LoginScreen() {
   const [error, setError] = React.useState("");
   const { user, login } = useAuth();
   const { width } = useWindowDimensions();
+  const { showSnackbar } = useSnackbar();
 
   const handleLogin = async () => {
     try {
       await login(username, password);
+      showSnackbar("login berhasil", "success");
       router.replace("/dashboard");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (error: any) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : typeof error === "string"
+          ? error
+          : "Terjadi kesalahan saat menyimpan data";
+
+      showSnackbar(errorMessage, "error");
+      // setError(err.message);
     }
   };
 
@@ -28,6 +39,16 @@ export default function LoginScreen() {
     <View style={styles.container}>
       {/* Left: Form */}
       <View style={styles.leftContainer}>
+        {/* <Image
+          source={{ uri: "https://i.pravatar.cc/100" }}
+          style={{
+            width: 36,
+            height: 36,
+            borderRadius: 18,
+            marginRight: 40,
+            alignSelf: "center"
+          }}
+        /> */}
         <Text variant="titleLarge" style={styles.title}>
           Get Started
         </Text>
@@ -50,7 +71,7 @@ export default function LoginScreen() {
         />
 
         <Button mode="contained" onPress={handleLogin} style={styles.button}>
-          CONTINUE
+          LOGIN
         </Button>
 
         <Divider style={styles.divider} />
@@ -77,12 +98,12 @@ export default function LoginScreen() {
           </Button>
         </View> */}
 
-        <Text style={styles.footerText}>
+        {/* <Text style={styles.footerText}>
           By logging in with my Facebook or Google account I agree to the
           <Text style={styles.link}> Terms of Use</Text>. My personal data will
           be processed in accordance with the
           <Text style={styles.link}> Privacy Statement</Text>.
-        </Text>
+        </Text> */}
       </View>
 
       {/* Right: Image */}

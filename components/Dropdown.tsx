@@ -34,6 +34,7 @@ const DropdownComponent = (prop: DropdownProp) => {
     <View style={{ backgroundColor: colors.background }}>
       {/* {renderLabel()} */}
       <Dropdown
+        mode="modal"
         style={{ ...styles.dropdown, borderColor: colors.borderInput }}
         placeholderStyle={{
           ...styles.placeholderStyle,

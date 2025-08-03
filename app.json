@@ -14,8 +14,7 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true,
-      "screenOrientation": ["landscape-left", "landscape-right"]
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
@@ -23,8 +22,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.imankamal.pointofsales",
-      "screenOrientation": "sensor-landscape"
+      "package": "com.imankamal.pointofsales"
     },
     "web": {
       "favicon": "./assets/favicon.png"
