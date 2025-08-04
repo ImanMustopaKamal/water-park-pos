@@ -1,6 +1,5 @@
 import { getDB } from "../initDB";
 import { Membership, MembershipCreate } from "../models/Membership";
-import { MembershipCategory } from "../models/MembershipCategory";
 import { PaginationQuery, PaginationResult } from "../models/pagination";
 
 const db = getDB();
@@ -48,7 +47,7 @@ export const getAllMembers = async (
 ): Promise<PaginationResult<Membership>> => {
   const { page, limit, search } = req;
 
-  const offset = (page - 1) * limit;
+  const offset = page * limit;
 
   const columnQuery = ["m.name", "m.code"];
 
@@ -106,7 +105,7 @@ export const createMembership = async (
   params: MembershipCreate
 ): Promise<number> => {
   try {
-    const code = await generateMembershipCode();
+    // const code = await generateMembershipCode();
     const startAt = formatDateTime(new Date());
     const endAt = formatDateTime(
       new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
@@ -119,7 +118,7 @@ export const createMembership = async (
         (?, ?, ?, ?, 1, ?, ?)`,
       [
         params.name,
-        code,
+        params.code,
         params.description,
         params.category_id,
         startAt,
@@ -149,6 +148,75 @@ export const getMembership = async (id: string): Promise<Membership | null> => {
     }
 
     return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateMembership = async (params: any): Promise<number> => {
+  try {
+    const exist = await db.getFirstAsync<Membership>(
+      `SELECT * FROM memberships WHERE id = ?`,
+      [params.id]
+    );
+
+    if (!exist) {
+      throw new Error("Membership tidak ditemukan");
+    }
+
+    const endAt =
+      params.extendPeriod !== ""
+        ? formatDateTime(
+            new Date(
+              new Date(exist.end_at).valueOf() +
+                params.extendPeriod * 24 * 60 * 60 * 1000
+            )
+          )
+        : exist.end_at;
+
+    const result = await db.runAsync(
+      `UPDATE memberships 
+      SET 
+        name = ?,
+        description = ?,
+        category_id = ?,
+        code = ?,
+        end_at = ?
+      WHERE id = ?`,
+      [
+        params.name,
+        params.description,
+        params.category_id,
+        params.code,
+        endAt,
+        params.id,
+      ]
+    );
+    console.log("🚀 ~ updateMembership ~ result:", result);
+
+    return result.lastInsertRowId;
+  } catch (error) {
+    console.log("🚀 ~ updateMembership ~ error:", error);
+    throw error;
+  }
+};
+
+export const checkMembership = async (code: string): Promise<Membership | null> => {
+  try {
+    const result = await db.getFirstAsync<Membership>(`
+    SELECT m.*, mc.name as category_name, 
+      (CASE WHEN m.status = 1 THEN 'Aktif' ELSE 'Tidak Aktif' END) as status_name
+    FROM memberships m
+    JOIN membership_categories mc ON mc.id = m.category_id
+    WHERE m.code = ?`, [code]);
+
+    if(!result) {
+      throw new Error('Member tidak ditemukan')
+    }
+    
+    console.log("🚀 ~ checkMembership ~ result:", result)
+
+    return result
   } catch (error) {
     throw error;
   }

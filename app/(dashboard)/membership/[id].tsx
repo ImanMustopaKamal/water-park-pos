@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { TextInput, Button, ActivityIndicator } from "react-native-paper";
+import {
+  TextInput,
+  Button,
+  ActivityIndicator,
+  Checkbox,
+  Text,
+} from "react-native-paper";
 import { useCustomTheme } from "../../../hooks/useCustomTheme";
 import Container from "../../../components/Container";
 import DropdownComponent from "../../../components/Dropdown";
@@ -10,6 +16,7 @@ import { getAllMemberCatogories } from "../../../database/services/MemberCategor
 import {
   createMembership,
   getMembership,
+  updateMembership,
 } from "../../../database/services/membershipServices";
 import { dateFormat } from "../../../utils/dateFormat";
 
@@ -27,7 +34,8 @@ export default function MembershipCreate() {
   const [description, setDescription] = useState("");
   const [expire, setExpire] = useState("");
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState<number>(0);
+  const [category, setCategory] = useState(0);
+  const [extendPeriod, setExtendPeriod] = useState("");
   const [categoryOld, setCategoryOld] = useState<number>(0);
 
   const [mcCategory, setMcCategory] = useState<IDropdown[]>([
@@ -42,13 +50,18 @@ export default function MembershipCreate() {
       name,
       description,
       category_id: category,
+      code,
+      extendPeriod,
+      id: selectedId,
     };
+    console.log("🚀 ~ handleSubmit ~ payload:", payload)
 
     try {
-      const result = await createMembership(payload);
+      const result = await updateMembership(payload);
+      console.log("🚀 ~ handleSubmit ~ result:", result)
       if (result) {
         setLoading(false);
-        showSnackbar("Data berhasil disimpan!", "success");
+        showSnackbar("Data berhasil diupdate!", "success");
         router.replace("/membership");
       }
     } catch (error: any) {
@@ -74,7 +87,7 @@ export default function MembershipCreate() {
         setDescription(result.description);
         setCode(result.code);
         setExpire(endAt);
-        setCategoryOld(result.category_id)
+        setCategoryOld(result.category_id);
       }
     } catch (error) {
       const errorMessage =
@@ -100,9 +113,9 @@ export default function MembershipCreate() {
   };
 
   const handleChangeCategory = async (item: any) => {
-    console.log("🚀 ~ handleChangeCategory ~ item:", item)
-    setCategory(item)
-  }
+    console.log("🚀 ~ handleChangeCategory ~ item:", item);
+    setCategory(item);
+  };
 
   useEffect(() => {
     if (selectedId) {
@@ -124,7 +137,7 @@ export default function MembershipCreate() {
           <DropdownComponent
             title="Kategori Member"
             data={mcCategory}
-            onChange={handleChangeCategory}
+            onChange={(i: any) => setCategory(i)}
             value={category}
           />
         </ScrollView>
@@ -193,6 +206,41 @@ export default function MembershipCreate() {
           },
         }}
       />
+
+      <TextInput
+        mode="outlined"
+        label="Perpanjang masa aktif"
+        inputMode="numeric"
+        value={extendPeriod}
+        onChangeText={setExtendPeriod}
+        style={styles.input}
+        theme={{
+          colors: {
+            primary: colors.text,
+            text: colors.text,
+            placeholder: colors.text,
+          },
+        }}
+      />
+      {/* <View
+        style={{
+          width: "70%",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "flex-start",
+          gap: 5,
+        }}
+      >
+        <Text>Perpanjang Member</Text>
+        <Checkbox
+          status={isExtend ? "checked" : "unchecked"}
+          onPress={() => {
+            setIsExtend(!isExtend);
+          }}
+        />
+
+        
+      </View> */}
 
       <View
         style={{

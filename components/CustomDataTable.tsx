@@ -1,6 +1,7 @@
 import React from "react";
 import { DataTable, Text } from "react-native-paper";
-import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+// import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useCustomTheme } from "../hooks/useCustomTheme";
 import { TouchableOpacity, View } from "react-native";
 
@@ -60,7 +61,7 @@ const CustomDataTable: React.FC<CustomDataTableProps> = ({
         ))}
       </DataTable.Header>
 
-      {data.slice(from, to).map((row, index) => (
+      {data.map((row, index) => (
         <DataTable.Row key={index}>
           {columns
             .filter((item: Column) => item.title !== "Aksi")
@@ -75,7 +76,6 @@ const CustomDataTable: React.FC<CustomDataTableProps> = ({
                 ) : (
                   <Text style={{ textAlign: "center" }}>{row[col.key]}</Text>
                 )}
-                {/* <Text style={{ textAlign: "center" }}>{row[col.key]}</Text> */}
               </DataTable.Cell>
             ))}
           <DataTable.Cell style={{ justifyContent: "center" }}>
@@ -85,7 +85,7 @@ const CustomDataTable: React.FC<CustomDataTableProps> = ({
                 style={{ padding: 8 }}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Icon name="pencil" size={20} style={{ color: colors.text }} />
+                <MaterialCommunityIcons name="pencil" size={20} style={{ color: colors.text }} />
               </TouchableOpacity>
             )}
             {showDelete && (
@@ -94,7 +94,7 @@ const CustomDataTable: React.FC<CustomDataTableProps> = ({
                 style={{ padding: 8 }}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               >
-                <Icon name="delete" size={20} style={{ color: colors.text }} />
+                <MaterialCommunityIcons name="delete" size={20} style={{ color: colors.text }} />
               </TouchableOpacity>
             )}
           </DataTable.Cell>

@@ -7,7 +7,7 @@ import DropdownComponent from "../../../components/Dropdown";
 import { router } from "expo-router";
 import { useSnackbar } from "../../../components/SnackbarProvider";
 import { getAllMemberCatogories } from "../../../database/services/MemberCategoryServices";
-import { createMembership } from "../../../database/services/membershipServices";
+import { createMembership, generateMembershipCode } from "../../../database/services/membershipServices";
 
 interface IDropdown {
   label: string;
@@ -18,8 +18,9 @@ export default function MembershipCreate() {
   const { colors } = useCustomTheme();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   const [mcCategory, setMcCategory] = useState<IDropdown[]>([
     { label: "", value: 0 },
   ]);
@@ -33,6 +34,7 @@ export default function MembershipCreate() {
       name,
       description,
       category_id: category,
+      code
     };
 
     try {
@@ -66,8 +68,21 @@ export default function MembershipCreate() {
     }
   };
 
+  const generateCode = async () => {
+    try {
+      const genetedCode = await generateMembershipCode();
+      if(genetedCode) {
+        setCode(genetedCode)
+      }
+      // console.log("🚀 ~ generateCode ~ code:", code)
+    } catch (error) {
+      console.log("error: ", error)
+    }
+  };
+
   useEffect(() => {
     loadData();
+    generateCode();
   }, []);
 
   return (
@@ -88,6 +103,22 @@ export default function MembershipCreate() {
           />
         </ScrollView>
       </View>
+
+      <TextInput
+        mode="outlined"
+        label="Kode Membership"
+        value={code}
+        onChangeText={setCode}
+        style={styles.input}
+        readOnly
+        theme={{
+          colors: {
+            primary: colors.text,
+            text: colors.text,
+            placeholder: colors.text,
+          },
+        }}
+      />
 
       <TextInput
         mode="outlined"

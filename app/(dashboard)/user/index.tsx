@@ -92,7 +92,7 @@ export default function User() {
   return (
     <Container
       title="List User"
-      addButton={{ path: "user", name: "Tambah User" }}
+      addButton={{ path: "user", name: "User" }}
     >
       <Searchbar
         placeholder="Cari user"

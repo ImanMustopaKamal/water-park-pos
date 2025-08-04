@@ -24,12 +24,12 @@ const menuItems = [
     path: "/user",
     roles: ["admin", "owner", "spv"],
   },
-  {
-    label: "Transaksi",
-    icon: "cash-register",
-    path: "/transaction",
-    roles: ["admin", "owner", "spv", "cashier"],
-  },
+  // {
+  //   label: "Transaksi",
+  //   icon: "cash-register",
+  //   path: "/transaction",
+  //   roles: ["admin", "owner", "spv", "cashier"],
+  // },
   // {
   //   label: "Laporan",
   //   icon: "file-chart",

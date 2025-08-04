@@ -5,14 +5,14 @@ import SHA256 from "crypto-js/sha256";
 const db = SQLite.openDatabaseSync("app.db");
 
 export const initDatabase = async () => {
-  await db.execAsync("PRAGMA foreign_keys = OFF;");
+  // await db.execAsync("PRAGMA foreign_keys = OFF;");
 
-  await db.runAsync(`DROP TRIGGER IF EXISTS trigger_users_updated_at;`);
-  await db.runAsync(`DROP TABLE IF EXISTS users;`);
-  await db.runAsync(`DROP TABLE IF EXISTS roles;`);
-  await db.runAsync(`DROP TRIGGER IF EXISTS trigger_memberships_updated_at;`);
-  await db.runAsync(`DROP TABLE IF EXISTS membership_categories;`);
-  await db.runAsync(`DROP TABLE IF EXISTS memberships;`);
+  // await db.runAsync(`DROP TRIGGER IF EXISTS trigger_users_updated_at;`);
+  // await db.runAsync(`DROP TABLE IF EXISTS users;`);
+  // await db.runAsync(`DROP TABLE IF EXISTS roles;`);
+  // await db.runAsync(`DROP TRIGGER IF EXISTS trigger_memberships_updated_at;`);
+  // await db.runAsync(`DROP TABLE IF EXISTS membership_categories;`);
+  // await db.runAsync(`DROP TABLE IF EXISTS memberships;`);
 
   await db.execAsync("PRAGMA foreign_keys = ON;");
 

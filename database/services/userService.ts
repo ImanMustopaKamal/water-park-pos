@@ -9,8 +9,8 @@ export const getAllUsers = async (
   req: PaginationQuery
 ): Promise<PaginationResult<User>> => {
   const { page, limit, search } = req;
-
-  const offset = (page - 1) * limit;
+  
+  const offset = page * limit;
 
   const columnQuery = ["roles.name", "users.name", "users.username"];
 

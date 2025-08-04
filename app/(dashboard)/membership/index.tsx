@@ -21,7 +21,7 @@ export default function Membership() {
   const [page, setPage] = useState(0);
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const limit = 10;
   const { canEdit, canDelete } = useRole("user");
@@ -74,15 +74,15 @@ export default function Membership() {
   };
 
   const loadData = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const result = await getAllMembers({ page, limit, search });
       setData(result.data);
       setTotal(result.total);
     } catch (err) {
-      console.error("DB Error:", err);
+      // console.error("DB Error:", err);
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -93,7 +93,8 @@ export default function Membership() {
   return (
     <Container
       title="List Membership"
-      addButton={{ path: "membership", name: "Tambah Membership" }}
+      validateButton={true}
+      addButton={{ path: "membership", name: "Membership" }}
     >
       <Searchbar
         placeholder="Cari member"
