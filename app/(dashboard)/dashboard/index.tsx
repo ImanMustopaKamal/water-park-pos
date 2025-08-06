@@ -23,7 +23,7 @@ export default function Dashboard() {
 
   const loadMember = async () => {
     try {
-      const result = await getAllMembers({ page: 0, limit: 2, search: "" });
+      const result = await getAllMembers({ page: 0, limit: 2, search: "", status: true });
       if (result) {
         setMembers(result.total);
       }

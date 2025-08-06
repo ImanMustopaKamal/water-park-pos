@@ -61,45 +61,63 @@ const CustomDataTable: React.FC<CustomDataTableProps> = ({
         ))}
       </DataTable.Header>
 
-      {data.map((row, index) => (
-        <DataTable.Row key={index}>
-          {columns
-            .filter((item: Column) => item.title !== "Aksi")
-            .map((col) => (
-              <DataTable.Cell
-                key={col.key}
-                numeric={col.numeric}
-                style={{ justifyContent: "center" }}
-              >
-                {col.render ? (
-                  col.render(row[col.key], row)
-                ) : (
-                  <Text style={{ textAlign: "center" }}>{row[col.key]}</Text>
-                )}
-              </DataTable.Cell>
-            ))}
-          <DataTable.Cell style={{ justifyContent: "center" }}>
-            {showEdit && (
-              <TouchableOpacity
-                onPress={() => onEdit?.(row)}
-                style={{ padding: 8 }}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              >
-                <MaterialCommunityIcons name="pencil" size={20} style={{ color: colors.text }} />
-              </TouchableOpacity>
-            )}
-            {showDelete && (
-              <TouchableOpacity
-                onPress={() => onDelete?.(row)}
-                style={{ padding: 8 }}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-              >
-                <MaterialCommunityIcons name="delete" size={20} style={{ color: colors.text }} />
-              </TouchableOpacity>
-            )}
+      {data.length === 0 ? (
+        <DataTable.Row>
+          <DataTable.Cell style={{ flex: 1, justifyContent: "center" }}>
+            <Text style={{ textAlign: "center", width: "100%" }}>
+              Data tidak ditemukan
+            </Text>
           </DataTable.Cell>
         </DataTable.Row>
-      ))}
+      ) : (
+        data.map((row, index) => (
+          <DataTable.Row key={index}>
+            {columns
+              .filter((item: Column) => item.title !== "Aksi")
+              .map((col) => (
+                <DataTable.Cell
+                  key={col.key}
+                  numeric={col.numeric}
+                  style={{ justifyContent: "center" }}
+                >
+                  {col.render ? (
+                    col.render(row[col.key], row)
+                  ) : (
+                    <Text style={{ textAlign: "center" }}>{row[col.key]}</Text>
+                  )}
+                </DataTable.Cell>
+              ))}
+            <DataTable.Cell style={{ justifyContent: "center" }}>
+              {showEdit && (
+                <TouchableOpacity
+                  onPress={() => onEdit?.(row)}
+                  style={{ padding: 8 }}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <MaterialCommunityIcons
+                    name="pencil"
+                    size={20}
+                    style={{ color: colors.text }}
+                  />
+                </TouchableOpacity>
+              )}
+              {showDelete && (
+                <TouchableOpacity
+                  onPress={() => onDelete?.(row)}
+                  style={{ padding: 8 }}
+                  hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                >
+                  <MaterialCommunityIcons
+                    name="delete"
+                    size={20}
+                    style={{ color: colors.text }}
+                  />
+                </TouchableOpacity>
+              )}
+            </DataTable.Cell>
+          </DataTable.Row>
+        ))
+      )}
 
       <DataTable.Pagination
         page={page}

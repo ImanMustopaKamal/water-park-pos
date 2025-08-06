@@ -43,12 +43,19 @@ export default function Container({
     try {
       setLoading(true);
       const result = await checkMembership(code);
+      console.log("🚀 ~ handleValidate ~ result:", result);
       if (result) {
         setPayload(result);
         setLoading(false);
+        setCode("");
+      } else {
+        setLoading(false);
+        setCode("");
+        showSnackbar("Data member tidak ditemukan", "info");
       }
     } catch (error: any) {
       setLoading(false);
+      setCode("");
       const errorMessage =
         error instanceof Error
           ? error.message
@@ -161,7 +168,7 @@ export default function Container({
                     alignSelf: "flex-start",
                   }}
                 >
-                  {payload.status === 1 ? "Aktif" : "Tidak Aktif"}
+                  {payload.status === 1 ? "Aktif" : "Expired"}
                 </Text>
               </View>
             )}
@@ -174,7 +181,12 @@ export default function Container({
               style={{ marginTop: 20 }}
               icon={
                 loading
-                  ? () => <ActivityIndicator color="white" size="small" />
+                  ? () => (
+                      <ActivityIndicator
+                        color={colors.background}
+                        size="small"
+                      />
+                    )
                   : "checkbox-marked-circle-outline"
               }
             >

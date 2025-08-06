@@ -23,7 +23,8 @@ export const lightTheme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
-    primary: "#6200ee",
+    primary: "#2400eeff",
+    secondary: "#1aa570ff",
     background: "#ffffff",
     surface: "#ffffff",
     text: "#020618",
@@ -37,7 +38,8 @@ export const darkTheme: CustomTheme = {
   ...MD3DarkTheme,
   colors: {
     ...MD3DarkTheme.colors,
-    primary: "#bb86fc",
+    primary: "#9886fcff",
+    secondary: "#a7fc86ff",
     background: "#020618",
     surface: "#1f1f1f",
     text: "#ffffff",

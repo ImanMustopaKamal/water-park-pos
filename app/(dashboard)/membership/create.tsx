@@ -7,7 +7,10 @@ import DropdownComponent from "../../../components/Dropdown";
 import { router } from "expo-router";
 import { useSnackbar } from "../../../components/SnackbarProvider";
 import { getAllMemberCatogories } from "../../../database/services/MemberCategoryServices";
-import { createMembership, generateMembershipCode } from "../../../database/services/membershipServices";
+import {
+  createMembership,
+  generateMembershipCode,
+} from "../../../database/services/membershipServices";
 
 interface IDropdown {
   label: string;
@@ -17,6 +20,7 @@ interface IDropdown {
 export default function MembershipCreate() {
   const { colors } = useCustomTheme();
   const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
   const [description, setDescription] = useState("");
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,12 +33,25 @@ export default function MembershipCreate() {
   const { showSnackbar } = useSnackbar();
 
   const handleSubmit = async () => {
+    if (name === "") {
+      alert("Masukan nama member");
+      return;
+    }
+    if (code === "") {
+      alert("Masukan kode member");
+      return;
+    }
+    if (category === 0) {
+      alert("Pilih kategori member");
+      return;
+    }
     setLoading(true);
     const payload = {
       name,
       description,
       category_id: category,
-      code
+      code,
+      phone
     };
 
     try {
@@ -71,18 +88,18 @@ export default function MembershipCreate() {
   const generateCode = async () => {
     try {
       const genetedCode = await generateMembershipCode();
-      if(genetedCode) {
-        setCode(genetedCode)
+      if (genetedCode) {
+        setCode(genetedCode);
       }
       // console.log("🚀 ~ generateCode ~ code:", code)
     } catch (error) {
-      console.log("error: ", error)
+      console.log("error: ", error);
     }
   };
 
   useEffect(() => {
     loadData();
-    generateCode();
+    // generateCode();
   }, []);
 
   return (
@@ -110,7 +127,6 @@ export default function MembershipCreate() {
         value={code}
         onChangeText={setCode}
         style={styles.input}
-        readOnly
         theme={{
           colors: {
             primary: colors.text,
@@ -125,6 +141,21 @@ export default function MembershipCreate() {
         label="Nama Lengkap"
         value={name}
         onChangeText={setName}
+        style={styles.input}
+        theme={{
+          colors: {
+            primary: colors.text,
+            text: colors.text,
+            placeholder: colors.text,
+          },
+        }}
+      />
+
+      <TextInput
+        mode="outlined"
+        label="No Telepon"
+        value={phone}
+        onChangeText={setPhone}
         style={styles.input}
         theme={{
           colors: {
@@ -174,7 +205,7 @@ export default function MembershipCreate() {
           style={{ width: "30%", marginTop: 16 }}
           icon={
             loading
-              ? () => <ActivityIndicator color="white" size="small" />
+              ? () => <ActivityIndicator color={colors.background} size="small" />
               : undefined
           }
         >

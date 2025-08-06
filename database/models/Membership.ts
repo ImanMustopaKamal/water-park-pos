@@ -3,6 +3,7 @@ export interface Membership {
   category_id: number;
   category_name: string;
   code: string;
+  phone?: string;
   name: string;
   description: string;
   status: number;
@@ -15,4 +16,16 @@ export interface MembershipCreate {
   name: string;
   description: string;
   code: string;
+  phone: string;
+}
+
+export interface MembershipImport {
+  category_id: number;
+  category_name: string;
+  code: string;
+  name: string;
+  description: string;
+  status: number;
+  start_at: string;
+  end_at: string;
 }

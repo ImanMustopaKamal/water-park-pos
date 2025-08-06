@@ -197,7 +197,7 @@ export default function UserCreate() {
           style={{ width: "30%", marginTop: 16 }}
           icon={
             loading
-              ? () => <ActivityIndicator color="white" size="small" />
+              ? () => <ActivityIndicator color={colors.background} size="small" />
               : undefined
           }
         >
